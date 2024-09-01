@@ -295,29 +295,26 @@
 </script>
 
 <script>
-    const scriptURL = 'https://script.google.com/macros/s/AKfycbyXACDZR9NPppyJ_3MR4IVBsJHQ69IX70G9QHxC9q6dflDnNOIlbplrwlwO72anxgME/exec'; 
+    const scriptURL = 'https://script.google.com/macros/s/AKfycbyXACDZR9NPppyJ_3MR4IVBsJHQ69IX70G9QHxC9q6dflDnNOIlbplrwlwO72anxgME/exec'; // Replace this with your actual deployed script URL
     const form = document.forms['submit-to-google-sheet'];
     const msg = document.getElementById("msg");
 
-   form.addEventListener('submit', e => {
-    e.preventDefault();
-    fetch(scriptURL, { method: 'POST', body: new FormData(form) })
-        .then(response => {
-            if (response.ok) {
+    form.addEventListener('submit', e => {
+        e.preventDefault();
+        fetch(scriptURL, { method: 'POST', body: new FormData(form) })
+            .then(response => response.text())
+            .then(text => {
                 msg.innerHTML = "Message Sent Successfully";
-                setTimeout(() => msg.innerHTML = "", 5000);
+                setTimeout(() => {
+                    msg.innerHTML = "";
+                }, 5000);
                 form.reset();
-            } else {
-                msg.innerHTML = "Failed to send message. Please try again.";
-                console.error('Form submission failed:', response.status, response.statusText);
-            }
-        })
-        .catch(error => {
-            msg.innerHTML = "Error occurred while submitting the form.";
-            console.error('Error!', error.message);
-        });
-});
-
+            })
+            .catch(error => {
+                console.error('Error!', error.message);
+                msg.innerHTML = "An error occurred while submitting the form. Please try again.";
+            });
+    });
 </script>
 
 
